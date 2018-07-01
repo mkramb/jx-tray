@@ -33,18 +33,28 @@ module.exports = {
         use: "ts-loader"
       },
       {
-        test: /\.css$|\.scss$/,
+        test: /\.css$/,
         use: extractCss.extract({
           use: [
             {
-              loader: "css-loader",
-              options: { import: false, url: false }
-            }
+              loader: "typings-for-css-modules-loader",
+              options: {
+                import: false,
+                url: false,
+                modules: true,
+                namedExport: true
+              }
+            },
+            "sass-loader"
           ],
           fallback: "style-loader"
         })
       }
     ]
   },
-  plugins: [extractCss, new webpack.NoEmitOnErrorsPlugin()]
+  plugins: [
+    extractCss,
+    new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.WatchIgnorePlugin([/css\.d\.ts$/])
+  ]
 };
