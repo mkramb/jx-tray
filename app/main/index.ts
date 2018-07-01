@@ -1,10 +1,15 @@
 import { app, BrowserWindow } from "electron";
+import { isProd } from "env-var-helpers";
 
 let mainWindow: BrowserWindow | null;
 
 function createWindow() {
   mainWindow = new BrowserWindow({ width: 800, height: 600 });
-  mainWindow.loadFile("build/index.html");
+
+  isProd
+    ? mainWindow.loadFile("build/index.html")
+    : mainWindow.loadURL("http://localhost:9000");
+
   mainWindow.on("closed", () => {
     mainWindow = null;
   });

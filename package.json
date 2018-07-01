@@ -16,11 +16,14 @@
   },
   "scripts": {
     "precommit": "pretty-quick --staged",
-    "start": "cross-env NODE_ENV='development' webpack-dev-server --config webpack/config.renderer.js --hot --inline --open",
-    "build": "rimraf build && cross-env NODE_ENV='production' parallel-webpack --config=./webpack/config.app.js",
+    "start": "concurrently -k \"npm run start-server\" \"npm run start-electron\"",
+    "start-server": "webpack-dev-server --config webpack/config.renderer.js --port 9000 --hot --inline",
+    "start-electron": "concurrently -k \"webpack --config webpack/config.main.js --watch\" \"wait-on http://localhost:9000 && electron .\"",
+    "build": "rimraf build && cross-env NODE_ENV=production parallel-webpack --config webpack/config.app.js",
     "package": "rimraf package && electron-builder",
     "tslint-check": "tslint-config-prettier-check ./tslint.json",
-    "lint": "tslint --project . --rules-dir . src/**/*.ts*"
+    "lint": "tslint --project . --rules-dir . src/**/*.ts*",
+    "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
     "react": "16.2.0",
@@ -55,6 +58,7 @@
     "tslint-config-prettier": "^1.7.0",
     "tslint-loader": "^3.5.3",
     "typescript": "^2.7.2",
+    "wait-on": "^2.1.0",
     "webpack": "^4.12.0",
     "webpack-cli": "^3.0.8",
     "webpack-dev-server": "^3.1.4",

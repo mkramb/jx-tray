@@ -1,8 +1,8 @@
 const path = require("path");
 const webpack = require("webpack");
 const helpers = require("env-var-helpers");
-const loaders = require("./loaders");
-const plugins = require("./plugins");
+const ExtractPlugin = require("extract-text-webpack-plugin");
+const extractCss = new ExtractPlugin("[name].css");
 
 module.exports = {
   mode: helpers.isProd ? "production" : "development",
@@ -10,8 +10,7 @@ module.exports = {
   devServer: {
     overlay: { errors: true, warnings: true },
     historyApiFallback: true,
-    host: "0.0.0.0",
-    port: 9000
+    host: "0.0.0.0"
   },
   output: {
     path: path.resolve(__dirname, "..", "build")
@@ -20,6 +19,34 @@ module.exports = {
     extensions: [".js", ".jsx", ".ts", ".tsx"],
     modules: [path.resolve(__dirname, "..", "node_modules")]
   },
-  module: { rules: [loaders.TsLint, loaders.Ts, loaders.Css] },
-  plugins: [plugins.CssExtract, new webpack.NoEmitOnErrorsPlugin()]
+  module: {
+    rules: [
+      {
+        enforce: "pre",
+        test: /\.js$|\.jsx$|\.tsx?$/,
+        exclude: /node_modules/,
+        use: "tslint-loader"
+      },
+      {
+        test: /\.js$|\.jsx$|\.tsx?$/,
+        exclude: /node_modules/,
+        use: "ts-loader"
+      },
+      {
+        test: /\.css$|\.scss$/,
+        use: extractCss.extract({
+          use: [
+            { loader: "css-loader", options: { import: false, url: false } },
+            {
+              loader: "postcss-loader",
+              options: { plugins: [require("autoprefixer")] }
+            },
+            "sass-loader"
+          ],
+          fallback: "style-loader"
+        })
+      }
+    ]
+  },
+  plugins: [extractCss, new webpack.NoEmitOnErrorsPlugin()]
 };

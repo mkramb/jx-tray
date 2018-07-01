@@ -1,1 +1,4 @@
-module.exports = [require("./config.main"), require("./config.renderer")];
+const main = require("./config.main");
+const renderer = require("./config.renderer");
+
+module.exports = [main, renderer];
