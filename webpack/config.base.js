@@ -36,12 +36,10 @@ module.exports = {
         test: /\.css$|\.scss$/,
         use: extractCss.extract({
           use: [
-            { loader: "css-loader", options: { import: false, url: false } },
             {
-              loader: "postcss-loader",
-              options: { plugins: [require("autoprefixer")] }
-            },
-            "sass-loader"
+              loader: "css-loader",
+              options: { import: false, url: false }
+            }
           ],
           fallback: "style-loader"
         })
