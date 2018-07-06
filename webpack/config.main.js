@@ -8,5 +8,8 @@ module.exports = merge({}, config, {
   output: {
     libraryTarget: "commonjs2",
     filename: "main.js"
+  },
+  node: {
+    __dirname: false
   }
 });

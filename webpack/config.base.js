@@ -2,7 +2,7 @@ const path = require("path");
 const webpack = require("webpack");
 const helpers = require("env-var-helpers");
 const ExtractPlugin = require("extract-text-webpack-plugin");
-const extractCss = new ExtractPlugin("[name].css");
+const extractCss = new ExtractPlugin("renderer.css");
 
 module.exports = {
   mode: helpers.isProd ? "production" : "development",
@@ -31,6 +31,10 @@ module.exports = {
         test: /\.js$|\.jsx$|\.tsx?$/,
         exclude: /node_modules/,
         use: "ts-loader"
+      },
+      {
+        test: /\.(png)$/,
+        use: "url-loader"
       },
       {
         test: /\.css$/,
