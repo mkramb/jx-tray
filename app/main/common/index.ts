@@ -1,2 +1,2 @@
-export * from "./window";
-export * from "./trayIcon";
+export * from './window';
+export * from './trayIcon';

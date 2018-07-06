@@ -1,41 +1,40 @@
-import { BrowserWindow } from "electron";
-import { isProd } from "env-var-helpers";
+import { BrowserWindow } from 'electron';
 
 let mainWindow: BrowserWindow | null;
 
 function createWindow() {
-  mainWindow = new BrowserWindow({
-    height: 200,
-    width: 620
-  });
+    mainWindow = new BrowserWindow({
+        height: 200,
+        width: 620
+    });
 
-  isProd
-    ? mainWindow.loadFile("build/index.html")
-    : mainWindow.loadURL("http://localhost:9000");
+    if (process.env.NODE_ENV === 'development') {
+        mainWindow.loadURL('http://localhost:9000');
+    } else {
+        mainWindow.loadFile(__dirname + '/index.html');
+    }
 
-  mainWindow.on("closed", () => {
-    mainWindow = null;
-  });
+    mainWindow.on('closed', () => {
+        mainWindow = null;
+    });
 
-  return mainWindow;
+    return mainWindow;
 }
 
 function showDevTools() {
-  mainWindow &&
-    mainWindow.isVisible() &&
-    mainWindow.webContents.openDevTools({ mode: "detach" });
+    mainWindow && mainWindow.isVisible() && mainWindow.webContents.openDevTools({ mode: 'detach' });
 }
 
 function toggleWindow() {
-  if (!mainWindow) {
-    mainWindow = createWindow();
-  }
+    if (!mainWindow) {
+        mainWindow = createWindow();
+    }
 
-  if (!mainWindow.isVisible() || !mainWindow.isFocused()) {
-    mainWindow.show();
-  } else {
-    mainWindow.hide();
-  }
+    if (!mainWindow.isVisible() || !mainWindow.isFocused()) {
+        mainWindow.show();
+    } else {
+        mainWindow.hide();
+    }
 }
 
 export { toggleWindow, createWindow, showDevTools };

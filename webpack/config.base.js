@@ -1,64 +1,56 @@
-const path = require("path");
-const webpack = require("webpack");
-const helpers = require("env-var-helpers");
-const ExtractPlugin = require("extract-text-webpack-plugin");
-const extractCss = new ExtractPlugin("renderer.css");
+const path = require('path');
+const webpack = require('webpack');
+const isProd = process.env.NODE_ENV === 'production';
 
 module.exports = {
-  mode: helpers.isProd ? "production" : "development",
-  devtool: helpers.isProd ? "source-map" : "cheap-module-eval-source-map",
-  devServer: {
-    overlay: { errors: true, warnings: true },
-    historyApiFallback: true,
-    host: "0.0.0.0"
-  },
-  output: {
-    path: path.resolve(__dirname, "..", "build")
-  },
-  resolve: {
-    extensions: [".js", ".jsx", ".ts", ".tsx"],
-    modules: [path.resolve(__dirname, "..", "node_modules")]
-  },
-  module: {
-    rules: [
-      {
-        enforce: "pre",
-        test: /\.js$|\.jsx$|\.tsx?$/,
-        exclude: /node_modules/,
-        use: "tslint-loader"
-      },
-      {
-        test: /\.js$|\.jsx$|\.tsx?$/,
-        exclude: /node_modules/,
-        use: "ts-loader"
-      },
-      {
-        test: /\.(png)$/,
-        use: "url-loader"
-      },
-      {
-        test: /\.css$/,
-        use: extractCss.extract({
-          use: [
+    mode: isProd ? 'production' : 'development',
+    devtool: isProd ? 'source-map' : 'cheap-module-eval-source-map',
+    devServer: {
+        overlay: { errors: true, warnings: true },
+        historyApiFallback: true,
+        host: '0.0.0.0'
+    },
+    output: {
+        path: path.resolve(__dirname, '..', 'build')
+    },
+    resolve: {
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+        modules: [path.resolve(__dirname, '..', 'node_modules')]
+    },
+    module: {
+        rules: [
             {
-              loader: "typings-for-css-modules-loader",
-              options: {
-                import: false,
-                url: false,
-                modules: true,
-                namedExport: true
-              }
+                enforce: 'pre',
+                test: /\.js$|\.jsx$|\.tsx?$/,
+                exclude: /node_modules/,
+                use: 'tslint-loader'
             },
-            "sass-loader"
-          ],
-          fallback: "style-loader"
-        })
-      }
-    ]
-  },
-  plugins: [
-    extractCss,
-    new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.WatchIgnorePlugin([/css\.d\.ts$/])
-  ]
+            {
+                test: /\.js$|\.jsx$|\.tsx?$/,
+                exclude: /node_modules/,
+                use: 'ts-loader'
+            },
+            {
+                test: /\.(png)$/,
+                use: 'url-loader'
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    'style-loader',
+                    {
+                        loader: 'typings-for-css-modules-loader',
+                        options: {
+                            import: false,
+                            url: false,
+                            modules: true,
+                            namedExport: true
+                        }
+                    },
+                    'sass-loader'
+                ]
+            }
+        ]
+    },
+    plugins: [new webpack.NoEmitOnErrorsPlugin(), new webpack.WatchIgnorePlugin([/css\.d\.ts$/])]
 };
