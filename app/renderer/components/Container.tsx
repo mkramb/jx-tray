@@ -7,8 +7,9 @@ injectGlobal`
   ${reset}
 
   body {
-    background-color: white;
     font-family: 'Roboto', sans-serif;
+    background-color: white;
+    user-select: none;
   }
 `;
 
