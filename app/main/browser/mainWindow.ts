@@ -1,13 +1,13 @@
 import { BrowserWindow } from 'electron';
-import { getWindowPosition } from '../util';
+import { getCentralPosition } from '../util';
 import { getTrayIcon } from '../menu';
 
 let mainWindow: BrowserWindow | null;
 
 function createMainWindow() {
     mainWindow = new BrowserWindow({
-        width: 300,
-        height: 450,
+        width: 240,
+        height: 380,
         show: false,
         frame: false,
         fullscreenable: false,
@@ -37,7 +37,7 @@ function toggleMainWindow() {
     }
 
     if (!mainWindow.isVisible() || !mainWindow.isFocused()) {
-        const position = getWindowPosition(mainWindow.getBounds(), getTrayIcon()!.getBounds());
+        const position = getCentralPosition(mainWindow.getBounds(), getTrayIcon()!.getBounds());
 
         mainWindow.setPosition(position.x, position.y, false);
         mainWindow.show();

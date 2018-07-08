@@ -1,15 +1,31 @@
 import * as React from 'react';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { PipelinesList } from './Pipelines';
+import { PipelinesContainer } from './Pipelines';
+import { injectGlobal, ThemeProvider } from 'styled-components';
+import reset from 'styled-reset';
 
-const theme = createMuiTheme();
+injectGlobal`
+  ${reset}
+
+  body {
+    background-color: white;
+    font-family: 'Roboto', sans-serif;
+  }
+`;
+
+const theme = {
+    color: {
+        blue: '#1d7dcf',
+        white: '#ffffff'
+    },
+    spacing(multiply: number = 1) {
+        return 8 * multiply + 'px';
+    }
+};
 
 export function Container() {
     return (
-        <MuiThemeProvider theme={theme}>
-            <CssBaseline />
-            <PipelinesList />
-        </MuiThemeProvider>
+        <ThemeProvider theme={theme}>
+            <PipelinesContainer />
+        </ThemeProvider>
     );
 }

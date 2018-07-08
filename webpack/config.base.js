@@ -36,21 +36,9 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                use: [
-                    'style-loader',
-                    {
-                        loader: 'typings-for-css-modules-loader',
-                        options: {
-                            import: false,
-                            url: false,
-                            modules: true,
-                            namedExport: true
-                        }
-                    },
-                    'sass-loader'
-                ]
+                use: ['style-loader', 'css-loader']
             }
         ]
     },
-    plugins: [new webpack.NoEmitOnErrorsPlugin(), new webpack.WatchIgnorePlugin([/css\.d\.ts$/])]
+    plugins: [new webpack.NoEmitOnErrorsPlugin()]
 };
