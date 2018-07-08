@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { PipelinesContainer } from './Pipelines';
+import { PipelinesList } from './pipelines';
 import { injectGlobal, ThemeProvider } from 'styled-components';
 import reset from 'styled-reset';
 
@@ -8,7 +8,7 @@ injectGlobal`
 
   body {
     font-family: 'Roboto', sans-serif;
-    background-color: white;
+    background-color: #ffffff;
     user-select: none;
   }
 `;
@@ -16,17 +16,20 @@ injectGlobal`
 const theme = {
     color: {
         blue: '#1d7dcf',
-        white: '#ffffff'
+        white: '#ffffff',
+        grey: '#b1b1b1',
+        lightGrey: '#eeeeee'
     },
-    spacing(multiply: number = 1) {
-        return 8 * multiply + 'px';
+    spacing: {
+        min: 4,
+        base: 8
     }
 };
 
-export function Container() {
+export function App() {
     return (
         <ThemeProvider theme={theme}>
-            <PipelinesContainer />
+            <PipelinesList />
         </ThemeProvider>
     );
 }
