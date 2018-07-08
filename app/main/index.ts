@@ -1,5 +1,5 @@
 import { app } from 'electron';
-import { createTrayIcon, getTrayIcon } from './common';
+import { createTrayIcon, getTrayIcon } from './menu';
 
 app.on('ready', createTrayIcon);
 

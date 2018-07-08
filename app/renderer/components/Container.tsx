@@ -1,10 +1,15 @@
 import * as React from 'react';
-import * as styles from './Container.css';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { PipelinesList } from './Pipelines';
+
+const theme = createMuiTheme();
 
 export function Container() {
     return (
-        <div className={styles.container}>
-            <h1>JenkinsX</h1>
-        </div>
+        <MuiThemeProvider theme={theme}>
+            <CssBaseline />
+            <PipelinesList />
+        </MuiThemeProvider>
     );
 }
