@@ -1,5 +1,5 @@
 import { BrowserWindow } from 'electron';
-import { getCentralPosition } from '../util';
+import { getCentralPosition } from '../utils';
 import { getTrayIcon } from './tray';
 
 let mainWindow: BrowserWindow | null;

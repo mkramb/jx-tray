@@ -1,9 +1,9 @@
 import { initMenu } from './menu';
 import { initPipeline } from './pipeline';
 
-function initRemoteApi() {
+function initRemotesApi() {
     initMenu();
     initPipeline();
 }
 
-export { initRemoteApi };
+export { initRemotesApi };

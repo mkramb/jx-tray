@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { ipcRenderer } from 'electron';
 import { Menu } from 'styled-icons/material/Menu';
-import { MENU_OPEN } from '../../../main/action';
+import { MENU_OPEN } from '../../../main/actions';
 
 const MenuIcon = Menu.extend`
     fill: ${props => props.theme.color.grey};

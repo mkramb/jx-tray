@@ -1,6 +1,6 @@
 import { ipcMain, Rectangle, Event } from 'electron';
 import { innerMenu } from '../browser';
-import { MENU_OPEN } from '../action';
+import { MENU_OPEN } from '../actions';
 
 const showMenu = async (event: Event, bounds: Rectangle) => {
     if (bounds && bounds.x && bounds.y) {

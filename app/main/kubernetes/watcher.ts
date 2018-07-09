@@ -1,23 +1,10 @@
-import * as k8s from '@kubernetes/client-node';
-import StrictEventEmitter from 'strict-event-emitter-types';
 import { EventEmitter } from 'events';
-
-export enum KubeCallbackKind {
-    ADDED = 'ADDED',
-    UPDATED = 'MODIFIED',
-    REMOVED = 'DELETED'
-}
-
-export interface Events {
-    [KubeCallbackKind.ADDED]: object;
-    [KubeCallbackKind.UPDATED]: object;
-    [KubeCallbackKind.REMOVED]: object;
-}
-
-export type KubeWatchCallback = (kind: KubeCallbackKind, event: any) => void;
+import StrictEventEmitter from 'strict-event-emitter-types';
+import * as k8s from '@kubernetes/client-node';
+import { KubeCallbackKind, KubeEvents, KubeCallback } from './types';
 
 export class KubeWatcher {
-    emitter: StrictEventEmitter<EventEmitter, Events>;
+    emitter: StrictEventEmitter<EventEmitter, KubeEvents>;
     config: k8s.KubeConfig;
     request: any;
 
@@ -54,7 +41,7 @@ export class KubeWatcher {
         this.request && this.request.abort();
     }
 
-    addCallback(callback: KubeWatchCallback) {
+    addCallback(callback: KubeCallback) {
         this.emitter.on(KubeCallbackKind.ADDED, event => callback(KubeCallbackKind.ADDED, event));
         this.emitter.on(KubeCallbackKind.UPDATED, event => callback(KubeCallbackKind.UPDATED, event));
         this.emitter.on(KubeCallbackKind.REMOVED, event => callback(KubeCallbackKind.REMOVED, event));

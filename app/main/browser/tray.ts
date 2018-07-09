@@ -1,6 +1,6 @@
 import { Tray, nativeImage } from 'electron';
 import { toggleMainWindow, getMainWindow } from '../browser';
-import { showDevTools } from '../util';
+import { showDevTools } from '../utils';
 import * as trayIcon from '../../static/tray.png';
 
 let tray: Tray | null;

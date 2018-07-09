@@ -1,6 +1,6 @@
 import { app } from 'electron';
-import { patchNodePath } from './util';
-import { initRemoteApi } from './remote';
+import { patchNodePath } from './utils';
+import { initRemotesApi } from './remotes';
 import { createMainWindow, createTrayIcon, getTrayIcon } from './browser';
 
 patchNodePath();
@@ -8,7 +8,7 @@ patchNodePath();
 app.on('ready', () => {
     createMainWindow();
     createTrayIcon();
-    initRemoteApi();
+    initRemotesApi();
 });
 
 app.on('window-all-closed', () => {
