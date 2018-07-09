@@ -3,9 +3,17 @@ import StrictEventEmitter from 'strict-event-emitter-types';
 import * as k8s from '@kubernetes/client-node';
 import { KubeCallbackKind, KubeEvents, KubeCallback } from './types';
 
+const config = new k8s.KubeConfig();
+
+try {
+    config.loadFromFile(process.env['HOME'] + '/.kube/config');
+} catch (err) {
+    console.error(`error reading .kube: ${err.message}`);
+    throw err;
+}
+
 export class KubeWatcher {
     emitter: StrictEventEmitter<EventEmitter, KubeEvents>;
-    config: k8s.KubeConfig;
     request: any;
 
     succesHandler = (kind: KubeCallbackKind, event: any) => {
@@ -17,24 +25,21 @@ export class KubeWatcher {
     errorHandler = (err: any) => {
         console.error(err);
         console.info('Reconnecting watcher');
-        setTimeout(this.connect, 1000);
+        setTimeout(() => this.connect, 1000);
     };
 
     constructor(private crd: string) {
         this.emitter = new EventEmitter();
-        this.config = new k8s.KubeConfig();
-
-        try {
-            this.config.loadFromFile(process.env['HOME'] + '/.kube/config');
-        } catch (e) {
-            console.error(`error reading .kube: ${e.message}`);
-            throw e;
-        }
     }
 
     connect() {
-        const watcher = new k8s.Watch(this.config);
-        this.request = watcher.watch(this.crd, {}, this.succesHandler, this.errorHandler);
+        const watcher = new k8s.Watch(config);
+
+        try {
+            this.request = watcher.watch(this.crd, {}, this.succesHandler, this.errorHandler);
+        } catch (err) {
+            this.errorHandler(err);
+        }
     }
 
     disconnect() {

@@ -13,6 +13,8 @@ function createMainWindow() {
         fullscreenable: false,
         resizable: false,
         transparent: true,
+        autoHideMenuBar: true,
+        skipTaskbar: true,
         webPreferences: {
             backgroundThrottling: false
         }

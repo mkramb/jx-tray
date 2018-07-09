@@ -2,6 +2,8 @@ import { app } from 'electron';
 import { initRemotesApi } from './remotes';
 import { createMainWindow, createTrayIcon, getTrayIcon } from './browser';
 
+app.dock.hide();
+
 app.on('ready', () => {
     createMainWindow();
     createTrayIcon();
