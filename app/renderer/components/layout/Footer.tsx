@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { ipcRenderer } from 'electron';
 import { Menu } from 'styled-icons/material/Menu';
-import { OPEN_MENU } from '../../../main/api';
+import { MENU_OPEN } from '../../../main/action';
 
 const MenuIcon = Menu.extend`
     fill: ${props => props.theme.color.grey};
@@ -28,7 +28,7 @@ class Footer extends React.Component<FooterProps> {
     onMenuShow = (event: React.MouseEvent<HTMLAnchorElement>) => {
         const rect = event.currentTarget.getBoundingClientRect();
 
-        ipcRenderer.send(OPEN_MENU, {
+        ipcRenderer.send(MENU_OPEN, {
             height: rect.height,
             width: rect.width,
             x: rect.left,

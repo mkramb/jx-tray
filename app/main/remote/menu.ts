@@ -1,8 +1,8 @@
 import { ipcMain, Rectangle, Event } from 'electron';
 import { innerMenu } from '../menu';
-import { OPEN_MENU } from '../api';
+import { MENU_OPEN } from '../action';
 
-const openMenu = async (event: Event, bounds: Rectangle) => {
+const showMenu = async (event: Event, bounds: Rectangle) => {
     if (bounds && bounds.x && bounds.y) {
         bounds.x = parseInt(bounds.x.toFixed(), 10) + bounds.width / 2;
         bounds.y = parseInt(bounds.y.toFixed(), 10) - bounds.height / 2;
@@ -16,8 +16,8 @@ const openMenu = async (event: Event, bounds: Rectangle) => {
     }
 };
 
-function setupOpenMenu() {
-    ipcMain.on(OPEN_MENU, openMenu);
+function initMenu() {
+    ipcMain.on(MENU_OPEN, showMenu);
 }
 
-export { setupOpenMenu };
+export { initMenu };

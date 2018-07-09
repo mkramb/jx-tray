@@ -1,2 +1,2 @@
 export * from './tray';
-export * from './innerMenu';
+export * from './menu';

@@ -1,7 +1,9 @@
-import { setupOpenMenu } from './openMenu';
+import { initMenu } from './menu';
+import { initPipeline } from './pipeline';
 
-function setupRemote() {
-    setupOpenMenu();
+function initRemoteApi() {
+    initMenu();
+    initPipeline();
 }
 
-export { setupRemote };
+export { initRemoteApi };

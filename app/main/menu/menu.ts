@@ -1,11 +1,16 @@
+import * as shelljs from 'shelljs';
 import { Menu, shell } from 'electron';
-import * as terminalTab from 'terminal-tab';
 
 async function innerMenu() {
     return Menu.buildFromTemplate([
         {
             label: 'Open the CloudBees UI',
-            click: () => terminalTab.open('jx cloudbees')
+            click: () => {
+                shelljs.exec('jx cloudbees', {
+                    silent: true,
+                    async: true
+                });
+            }
         },
         { type: 'separator' },
         {
