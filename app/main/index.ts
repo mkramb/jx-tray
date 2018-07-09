@@ -1,9 +1,6 @@
 import { app } from 'electron';
-import { patchNodePath } from './utils';
 import { initRemotesApi } from './remotes';
 import { createMainWindow, createTrayIcon, getTrayIcon } from './browser';
-
-patchNodePath();
 
 app.on('ready', () => {
     createMainWindow();

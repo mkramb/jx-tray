@@ -1,0 +1,36 @@
+patch-package
+--- a/node_modules/@kubernetes/client-node/dist/config.js
++++ b/node_modules/@kubernetes/client-node/dist/config.js
+@@ -91,16 +91,22 @@ class KubeConfig {
+                             cmd = cmd + ' ' + config['cmd-args'];
+                         }
+                         // TODO: Cache to file?
+-                        const result = shelljs.exec(cmd, { silent: true });
+-                        if (result['code'] != 0) {
+-                            throw new Error('Failed to refresh token: ' + result);
+-                        }
+-                        let resultObj = JSON.parse(result.stdout.toString());
+-                        let path = config['token-key'];
+-                        // Format in file is {<query>}, so slice it out and add '$'
+-                        path = '$' + path.slice(1, -1);
+-                        config['access-token'] = jsonpath.query(resultObj, path);
+-                        token = 'Bearer ' + config['access-token'];
++                        const command = shelljs.exec(cmd, { silent: true, async: true });
++
++                        command.stdout.on('data', (data) => {
++                            let resultObj = JSON.parse(data.toString());
++                            let path = config['token-key'];
++
++                            // Format in file is {<query>}, so slice it out and add '$'
++                            path = '$' + path.slice(1, -1);
++    
++                            config['access-token'] = jsonpath.query(resultObj, path);
++                            token = 'Bearer ' + config['access-token'];
++                        })
++
++                        command.stderr.on('data', (data) => {
++                            throw new Error('Failed to refresh token: ' + data);
++                        });
+                     }
+                     else {
+                         throw new Error('Token is expired!');

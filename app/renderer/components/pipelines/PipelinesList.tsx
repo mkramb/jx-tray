@@ -2,7 +2,7 @@ import * as React from 'react';
 import { ipcRenderer } from 'electron';
 import styled from 'styled-components';
 import { PIPELINE_SUBSCRIBE } from '../../../main/actions';
-import { KubeCallbackKind } from '../../../main/kubernetes';
+import { KubeCallbackKind } from '../../../main/kubernetes/types';
 import { Page } from '../layout';
 
 const Container = styled.div`
