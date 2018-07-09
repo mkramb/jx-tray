@@ -1,1 +1,3 @@
-export * from './mainWindow';
+export * from './window';
+export * from './menu';
+export * from './tray';

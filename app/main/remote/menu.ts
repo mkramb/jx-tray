@@ -1,5 +1,5 @@
 import { ipcMain, Rectangle, Event } from 'electron';
-import { innerMenu } from '../menu';
+import { innerMenu } from '../browser';
 import { MENU_OPEN } from '../action';
 
 const showMenu = async (event: Event, bounds: Rectangle) => {

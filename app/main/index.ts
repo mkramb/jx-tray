@@ -1,8 +1,7 @@
 import { app } from 'electron';
-import { initRemoteApi } from './remote';
-import { createTrayIcon, getTrayIcon } from './menu';
-import { createMainWindow } from './browser';
 import { patchNodePath } from './util';
+import { initRemoteApi } from './remote';
+import { createMainWindow, createTrayIcon, getTrayIcon } from './browser';
 
 patchNodePath();
 
