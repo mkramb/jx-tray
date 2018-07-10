@@ -2,7 +2,7 @@
 
 A desktop App to help working with Jenkins X.
 
-![App in action](demo.gif 'App in action')
+![App in action](screenshots/app.png 'App in action')
 
 ## Developing
 
