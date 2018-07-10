@@ -6,7 +6,12 @@ import { PIPELINE_SUBSCRIBE } from '../../main/actions';
 import { Pipeline } from '../models';
 
 export class PipelineStore {
-    @observable pipelines: Pipeline[] = [];
+    @observable pipelines: Pipeline[] | null = null;
+
+    @action
+    clear() {
+        this.pipelines = null;
+    }
 
     @action
     init() {
@@ -15,9 +20,10 @@ export class PipelineStore {
             runInAction(() => {
                 const newPipeline = Deserialize(data, Pipeline);
 
-                this.pipelines = this.pipelines
-                    .filter(pipeline => pipeline.key === newPipeline.key)
-                    .concat([newPipeline]);
+                this.pipelines = (this.pipelines || [])
+                    .filter(pipeline => pipeline.key !== newPipeline.key)
+                    .concat([newPipeline])
+                    .sort((a, b) => (a.key > b.key ? 0 : 1));
             });
         });
     }

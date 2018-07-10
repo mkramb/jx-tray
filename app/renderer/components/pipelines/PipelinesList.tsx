@@ -6,6 +6,7 @@ import { Page } from '../layout';
 
 const Pipeline = styled.a`
     padding: ${props => props.theme.spacing.min * 2 + 'px'};
+    font-size: 12px;
 `;
 
 export interface PipelinesListProps {
@@ -19,6 +20,10 @@ export class PipelinesList extends React.Component<PipelinesListProps> {
         this.props.pipelineStore!.init();
     }
 
+    componentWillUnmount() {
+        this.props.pipelineStore!.clear();
+    }
+
     render() {
         if (!this.props.pipelineStore!.pipelines) {
             return null;
@@ -26,7 +31,7 @@ export class PipelinesList extends React.Component<PipelinesListProps> {
 
         return (
             <Page title="pipelines">
-                {this.props.pipelineStore!.pipelines.map(pipeline => (
+                {this.props.pipelineStore!.pipelines!.map(pipeline => (
                     <Pipeline key={pipeline.key}>{pipeline.name}</Pipeline>
                 ))}
             </Page>

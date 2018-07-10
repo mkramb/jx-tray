@@ -23,11 +23,10 @@ export class Pipeline {
     @deserializeAs(PipelineSpec) spec: PipelineSpec;
 
     get key() {
-        return decodeURIComponent(this.spec.pipeline);
+        return this.name;
     }
 
     get name() {
-        const pipeline = this.key.split('/');
-        return pipeline.length > 2 ? `${pipeline[1]}/${pipeline[2]}` : this.spec.pipeline;
+        return decodeURIComponent(this.spec.pipeline);
     }
 }
