@@ -11,13 +11,13 @@ const MenuIcon = Menu.extend`
 `;
 
 const Container = styled.div`
+    display: flex;
     padding: ${props => props.theme.spacing.min + 'px'};
     padding-right: ${props => props.theme.spacing.base + 'px'};
     border-top: ${props => '1px solid' + props.theme.color.lightGrey};
     background-color: ${props => props.theme.color.white};
     flex-direction: row-reverse;
     align-items: center;
-    display: flex;
 `;
 
 interface FooterProps {

@@ -1,26 +1,34 @@
 import * as React from 'react';
-import { ipcRenderer } from 'electron';
+import { observer, inject } from 'mobx-react';
 import styled from 'styled-components';
-import { PIPELINE_SUBSCRIBE } from '../../../main/actions';
-import { KubeCallbackKind } from '../../../main/kubernetes/types';
+import { PipelineStore } from '../../stores';
 import { Page } from '../layout';
 
-const Container = styled.div`
-    padding: ${props => props.theme.spacing.base + 'px'};
+const Pipeline = styled.a`
+    padding: ${props => props.theme.spacing.min * 2 + 'px'};
 `;
 
-export class PipelinesList extends React.Component {
+export interface PipelinesListProps {
+    pipelineStore?: PipelineStore;
+}
+
+@inject('pipelineStore')
+@observer
+export class PipelinesList extends React.Component<PipelinesListProps> {
     componentDidMount() {
-        ipcRenderer.send(PIPELINE_SUBSCRIBE);
-        ipcRenderer.on(KubeCallbackKind.ADDED, (event: any, data: any) => {
-            console.log('added', data);
-        });
+        this.props.pipelineStore!.init();
     }
 
     render() {
+        if (!this.props.pipelineStore!.pipelines) {
+            return null;
+        }
+
         return (
             <Page title="pipelines">
-                <Container>WIP</Container>
+                {this.props.pipelineStore!.pipelines.map(pipeline => (
+                    <Pipeline key={pipeline.key}>{pipeline.name}</Pipeline>
+                ))}
             </Page>
         );
     }

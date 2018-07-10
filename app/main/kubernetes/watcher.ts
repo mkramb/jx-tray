@@ -3,47 +3,52 @@ import StrictEventEmitter from 'strict-event-emitter-types';
 import * as k8s from '@kubernetes/client-node';
 import { KubeCallbackKind, KubeEvents, KubeCallback } from './types';
 
-const config = new k8s.KubeConfig();
-
-try {
-    config.loadFromFile(process.env['HOME'] + '/.kube/config');
-} catch (err) {
-    console.error(`error reading .kube: ${err.message}`);
-    throw err;
-}
-
 export class KubeWatcher {
-    emitter: StrictEventEmitter<EventEmitter, KubeEvents>;
-    request: any;
-
-    succesHandler = (kind: KubeCallbackKind, event: any) => {
-        kind === KubeCallbackKind.ADDED && this.emitter.emit(KubeCallbackKind.ADDED, event);
-        kind === KubeCallbackKind.UPDATED && this.emitter.emit(KubeCallbackKind.UPDATED, event);
-        kind === KubeCallbackKind.REMOVED && this.emitter.emit(KubeCallbackKind.REMOVED, event);
-    };
-
-    errorHandler = (err: any) => {
-        console.error(err);
-        console.info('Reconnecting watcher');
-        setTimeout(() => this.connect, 1000);
-    };
+    private emitter: StrictEventEmitter<EventEmitter, KubeEvents> = new EventEmitter();
+    private config: k8s.KubeConfig = new k8s.KubeConfig();
+    private connected = false;
+    private request: any;
 
     constructor(private crd: string) {
-        this.emitter = new EventEmitter();
+        try {
+            this.config.loadFromFile(process.env['HOME'] + '/.kube/config');
+        } catch (err) {
+            console.error(`error reading .kube: ${err.message}`);
+            throw err;
+        }
     }
 
     connect() {
-        const watcher = new k8s.Watch(config);
+        if (!this.connected) {
+            this.connected = true;
+            const watcher = new k8s.Watch(this.config);
 
-        try {
-            this.request = watcher.watch(this.crd, {}, this.succesHandler, this.errorHandler);
-        } catch (err) {
-            this.errorHandler(err);
+            const handler = (kind: KubeCallbackKind, event: any) => {
+                kind === KubeCallbackKind.ADDED && this.emitter.emit(KubeCallbackKind.ADDED, event);
+                kind === KubeCallbackKind.UPDATED && this.emitter.emit(KubeCallbackKind.UPDATED, event);
+                kind === KubeCallbackKind.REMOVED && this.emitter.emit(KubeCallbackKind.REMOVED, event);
+            };
+
+            const doneHandler = (err: any) => {
+                console.error(err);
+                console.info('Reconnecting watcher');
+                setTimeout(execute, 1000);
+            };
+
+            const execute = () => {
+                this.request = watcher.watch(this.crd, {}, handler, doneHandler);
+            };
+
+            execute();
         }
     }
 
     disconnect() {
-        this.request && this.request.abort();
+        if (this.connected) {
+            this.request.abort();
+            this.emitter.removeAllListeners();
+            this.connected = false;
+        }
     }
 
     addCallback(callback: KubeCallback) {

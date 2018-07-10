@@ -3,6 +3,10 @@ import { initRemotesApi } from './remotes';
 import { createMainWindow, createTrayIcon, getTrayIcon } from './browser';
 
 app.dock.hide();
+app.setName('JX-Tray');
+
+// Chrome Command Line Switches
+app.commandLine.appendSwitch('disable-renderer-backgrounding');
 
 app.on('ready', () => {
     createMainWindow();

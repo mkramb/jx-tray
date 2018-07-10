@@ -6,7 +6,9 @@ import { getMainWindow } from '../browser';
 const pipelines = '/apis/jenkins.io/v1/namespaces/jx/pipelineactivities';
 const watcher = new KubeWatcher(pipelines);
 
-const watchPipelines = () => {
+export const watchPipelines = () => {
+    watcher.disconnect();
+
     watcher.addCallback((kind, event) => {
         getMainWindow()!.webContents.send(kind, event);
     });
@@ -14,10 +16,6 @@ const watchPipelines = () => {
     watcher.connect();
 };
 
-watchPipelines();
-
-function initPipeline() {
+export function initPipeline() {
     ipcMain.on(PIPELINE_SUBSCRIBE, watchPipelines);
 }
-
-export { initPipeline };
